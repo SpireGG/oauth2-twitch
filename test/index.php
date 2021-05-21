@@ -1,9 +1,16 @@
 <?php
 
-require '../vendor/autoload.php';
-require 'config.php';
+use SpireGG\OAuth2\Client\Provider\Twitch;
 
-$provider = new \Depotwarehouse\OAuth2\Client\Twitch\Provider\Twitch(
+require '../vendor/autoload.php';
+
+$config = [
+    'clientId' => "",
+    'clientSecret' => "",
+    'redirectUri' => ""
+];
+
+$provider = new Twitch(
     $config
 );
 

@@ -1,51 +1,52 @@
 <?php
 
-namespace Depotwarehouse\OAuth2\Client\Twitch\Provider;
+namespace SpireGG\OAuth2\Client\Provider;
 
-use Depotwarehouse\OAuth2\Client\Twitch\Entity\TwitchUser;
 use League\OAuth2\Client\Provider\AbstractProvider;
-use Depotwarehouse\OAuth2\Client\Twitch\Provider\Exception\TwitchIdentityProviderException;
+use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
+use League\OAuth2\Client\Provider\ResourceOwnerInterface;
 use League\OAuth2\Client\Token\AccessToken;
+use League\OAuth2\Client\Tool\BearerAuthorizationTrait;
 use Psr\Http\Message\ResponseInterface;
+use SpireGG\OAuth2\Client\Provider\Exception\TwitchIdentityProviderException;
 
 class Twitch extends AbstractProvider
 {
+    use BearerAuthorizationTrait;
 
     /**
-     * Api domain
+     * API Domain
      *
      * @var string
      */
-    public $apiDomain = 'https://api.twitch.tv';
-
-    public $scopes = [ 'user_read' ];
+    public $apiDomain = 'https://id.twitch.tv';
 
     /**
-     * Get authorization url to begin OAuth flow
+     * Get authorization URL to begin OAuth flow
      *
      * @return string
      */
     public function getBaseAuthorizationUrl()
     {
-        return $this->apiDomain.'/kraken/oauth2/authorize';
+        return $this->apiDomain . '/oauth2/authorize';
     }
 
     /**
-     * Get access token url to retrieve token
+     * Get access token URL to retrieve token
      *
-     * @param  array $params
+     * @param array $params
      *
      * @return string
      */
     public function getBaseAccessTokenUrl(array $params)
     {
-        return $this->apiDomain.'/kraken/oauth2/token';
+        return $this->apiDomain . '/oauth2/token';
     }
 
     /**
-     * Get provider url to fetch user details
+     * Get provider URL to retrieve user details
      *
-     * @param  AccessToken $token
+     * @param AccessToken $token
      *
      * @return string
      */
@@ -63,7 +64,7 @@ class Twitch extends AbstractProvider
      */
     public function getAuthenticatedUrlForEndpoint($endpoint, AccessToken $token)
     {
-        return $this->apiDomain.$endpoint.'?oauth_token='.$token->getToken();
+        return $this->apiDomain . $endpoint . '?oauth_token=' . $token->getToken();
     }
 
     /**
@@ -74,7 +75,7 @@ class Twitch extends AbstractProvider
      */
     public function getUrlForEndpoint($endpoint)
     {
-        return $this->apiDomain.$endpoint;
+        return $this->apiDomain . $endpoint;
     }
 
     /**
@@ -98,24 +99,24 @@ class Twitch extends AbstractProvider
      */
     protected function getDefaultScopes()
     {
-        return $this->scopes;
+        return [
+            'user_read'
+        ];
     }
 
     /**
-     * Checks response
+     * Check a provider response for errors.
      *
      * @param ResponseInterface $response
-     * @param array|string $data
-     * @throws \League\OAuth2\Client\Provider\Exception\IdentityProviderException
+     * @param array $data Parsed response data
+     * @return void
+     * @throws IdentityProviderException
      */
     protected function checkResponse(ResponseInterface $response, $data)
     {
-        if ($response->getStatusCode() >= 400)
-        {
+        if ($response->getStatusCode() >= 400) {
             throw TwitchIdentityProviderException::clientException($response, $data);
-        }
-        elseif (isset($data['error']))
-        {
+        } elseif (isset($data['error'])) {
             throw TwitchIdentityProviderException::oauthException($response, $data);
         }
     }
@@ -125,11 +126,11 @@ class Twitch extends AbstractProvider
      *
      * @param array $response
      * @param AccessToken $token
-     * @return TwitchUser
+     * @return ResourceOwnerInterface
      */
     protected function createResourceOwner(array $response, AccessToken $token)
     {
-        return new TwitchUser((array)$response);
+        return new TwitchResourceOwner($response);
     }
 
     /**
@@ -148,10 +149,9 @@ class Twitch extends AbstractProvider
      * @param AccessToken $token
      * @return array
      */
-    protected function getAuthorizationHeaders($token = null) {
-        if(isset($token))
-            return ['Authorization' => 'OAuth '.$token->getToken()];
-        return [];
+    protected function getAuthorizationHeaders($token = null)
+    {
+        return isset($token) ? ['Authorization' => 'OAuth ' . $token->getToken()] : [];
     }
 
 

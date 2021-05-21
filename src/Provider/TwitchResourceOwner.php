@@ -1,10 +1,8 @@
-<?php namespace Depotwarehouse\OAuth2\Client\Twitch\Entity;
+<?php namespace SpireGG\OAuth2\Client\Provider;
 
-/**
- * Class TwitchUser
- * @package Depotwarehouse\OAuth2\Client\Twitch\Entity
- */
-class TwitchUser
+use League\OAuth2\Client\Provider\ResourceOwnerInterface;
+
+class TwitchResourceOwner implements ResourceOwnerInterface
 {
     /**
      * @var string

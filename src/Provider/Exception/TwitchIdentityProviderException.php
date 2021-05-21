@@ -1,4 +1,4 @@
-<?php namespace Depotwarehouse\OAuth2\Client\Twitch\Provider\Exception;
+<?php namespace SpireGG\OAuth2\Client\Provider\Exception;
 
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use Psr\Http\Message\ResponseInterface;
@@ -6,10 +6,10 @@ use Psr\Http\Message\ResponseInterface;
 class TwitchIdentityProviderException extends IdentityProviderException
 {
     /**
-     * Creates client exception from response.
+     * Creates client exception from response
      *
-     * @param  ResponseInterface $response
-     * @param  string $data Parsed response data
+     * @param ResponseInterface $response
+     * @param array $data Parsed response data
      *
      * @return IdentityProviderException
      */
@@ -24,8 +24,8 @@ class TwitchIdentityProviderException extends IdentityProviderException
     /**
      * Creates oauth exception from response.
      *
-     * @param  ResponseInterface $response
-     * @param  string $data Parsed response data
+     * @param ResponseInterface $response
+     * @param array $data Parsed response data
      *
      * @return IdentityProviderException
      */
@@ -38,15 +38,15 @@ class TwitchIdentityProviderException extends IdentityProviderException
     }
 
     /**
-     * Creates identity exception from response.
+     * Creates identity exception from response
      *
-     * @param  ResponseInterface $response
-     * @param  string $message
+     * @param ResponseInterface $response
+     * @param string $message
      *
      * @return IdentityProviderException
      */
     protected static function fromResponse(ResponseInterface $response, $message = null)
     {
-        return new static($message, $response->getStatusCode(), (string) $response->getBody());
+        return new static($message, $response->getStatusCode(), (string)$response->getBody());
     }
 }

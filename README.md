@@ -7,14 +7,14 @@ This is a package to integrate twitch.tv authentication with the [OAuth2 client 
 To install, use composer:
 
 ```bash
-composer require depotwarehouse/oauth2-twitch
+composer require spiregg/oauth2-twitch
 ```
 
-Usage is the same as the league's OAuth client, using `\Depotwarehouse\OAuth2\Client\Twitch\Provider\Twitch` as the provider.
+Usage is the same as the league's OAuth client, using `\SpireGG\OAuth2\Client\Twitch\Provider\Twitch` as the provider.
 For example:
 
 ```php
-$provider = new \Depotwarehouse\OAuth2\Client\Twitch\Provider\Twitch([
+$provider = new SpireGG\OAuth2\Client\Provider\Twitch([
     'clientId' => "YOUR_CLIENT_ID",
     'clientSecret' => "YOUR_CLIENT_SECRET",
     'redirectUri' => "http://your-redirect-uri"
@@ -33,11 +33,11 @@ if (isset($_GET['code']) && $_GET['code']) {
         'code' => $_GET['code']
     ]);
 
-    // Returns an instance of Depotwarehouse\OAuth2\Client\Twitch\Entity\TwitchUser
+    // Returns an instance of SpireGG\OAuth2\Client\Twitch\Entity\TwitchUser
     $user = $this->provider->getResourceOwner($token);
     
     $user->getDisplayName();
-    $user->getId()
+    $user->getId();
     $user->getType();
     $user->getBio();
     $user->getEmail();

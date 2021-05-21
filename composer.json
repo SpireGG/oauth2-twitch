@@ -1,5 +1,5 @@
 {
-    "name": "tpavlek/oauth2-twitch",
+    "name": "spiregg/oauth2-twitch",
     "description": "A Twitch provider for league/oauth2-client",
     "license": "MIT",
     "authors": [
@@ -10,14 +10,18 @@
         {
             "name": "Troy Pavlek",
             "email": "troy@tpavlek.me"
+        },
+        {
+            "name": "Nicolas Temenides",
+            "email": "chypriote@lolpros.gg"
         }
     ],
     "require": {
-        "league/oauth2-client": "^2.4"
+        "league/oauth2-client": "^2.6"
     },
     "autoload": {
         "psr-4": {
-            "Depotwarehouse\\OAuth2\\Client\\Twitch\\": "src/"
+            "SpireGG\\OAuth2\\Client\\": "src/"
         }
     }
 }
