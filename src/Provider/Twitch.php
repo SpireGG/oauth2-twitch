@@ -19,7 +19,7 @@ class Twitch extends AbstractProvider
      *
      * @var string
      */
-    public $apiDomain = 'https://id.twitch.tv';
+    public $apiDomain = 'https://api.twitch.tv';
 
     /**
      * Get authorization URL to begin OAuth flow
@@ -28,7 +28,7 @@ class Twitch extends AbstractProvider
      */
     public function getBaseAuthorizationUrl()
     {
-        return $this->apiDomain . '/oauth2/authorize';
+        return $this->apiDomain . '/kraken/oauth2/authorize';
     }
 
     /**
@@ -40,7 +40,7 @@ class Twitch extends AbstractProvider
      */
     public function getBaseAccessTokenUrl(array $params)
     {
-        return $this->apiDomain . '/oauth2/token';
+        return $this->apiDomain . '/kraken/oauth2/token';
     }
 
     /**
@@ -153,6 +153,4 @@ class Twitch extends AbstractProvider
     {
         return isset($token) ? ['Authorization' => 'OAuth ' . $token->getToken()] : [];
     }
-
-
 }
