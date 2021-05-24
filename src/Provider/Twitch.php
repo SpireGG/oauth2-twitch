@@ -19,6 +19,7 @@ class Twitch extends AbstractProvider
      *
      * @var string
      */
+    public $authDomain = 'https://id.twitch.tv';
     public $apiDomain = 'https://api.twitch.tv';
 
     /**
@@ -28,7 +29,7 @@ class Twitch extends AbstractProvider
      */
     public function getBaseAuthorizationUrl()
     {
-        return $this->apiDomain . '/kraken/oauth2/authorize';
+        return $this->authDomain . '/oauth2/authorize';
     }
 
     /**
@@ -40,7 +41,7 @@ class Twitch extends AbstractProvider
      */
     public function getBaseAccessTokenUrl(array $params)
     {
-        return $this->apiDomain . '/kraken/oauth2/token';
+        return $this->authDomain . '/oauth2/token';
     }
 
     /**
@@ -52,30 +53,7 @@ class Twitch extends AbstractProvider
      */
     public function getResourceOwnerDetailsUrl(AccessToken $token)
     {
-        return $this->getAuthenticatedUrlForEndpoint('/kraken/user', $token);
-    }
-
-    /**
-     * Get the full uri with appended oauth_token query string
-     *
-     * @param string $endpoint | with leading slash
-     * @param AccessToken $token
-     * @return string
-     */
-    public function getAuthenticatedUrlForEndpoint($endpoint, AccessToken $token)
-    {
-        return $this->apiDomain . $endpoint . '?oauth_token=' . $token->getToken();
-    }
-
-    /**
-     * Get the full urls that do not require authentication
-     *
-     * @param $endpoint
-     * @return string
-     */
-    public function getUrlForEndpoint($endpoint)
-    {
-        return $this->apiDomain . $endpoint;
+        return $this->apiDomain . '/helix/users';
     }
 
     /**
@@ -100,7 +78,7 @@ class Twitch extends AbstractProvider
     protected function getDefaultScopes()
     {
         return [
-            'user_read'
+            'user:read:email'
         ];
     }
 
@@ -130,7 +108,7 @@ class Twitch extends AbstractProvider
      */
     protected function createResourceOwner(array $response, AccessToken $token)
     {
-        return new TwitchResourceOwner($response);
+        return new TwitchResourceOwner(isset($response['data']) ? $response['data'] : $response);
     }
 
     /**
@@ -140,7 +118,7 @@ class Twitch extends AbstractProvider
      */
     protected function getDefaultHeaders()
     {
-        return ['Client-ID' => $this->clientId, 'Accept' => 'application/vnd.twitchtv.v5+json'];
+        return ['Client-ID' => $this->clientId];
     }
 
     /**
@@ -151,6 +129,6 @@ class Twitch extends AbstractProvider
      */
     protected function getAuthorizationHeaders($token = null)
     {
-        return isset($token) ? ['Authorization' => 'OAuth ' . $token->getToken()] : [];
+        return $token ? ['Authorization' => 'Bearer ' . $token->getToken()] : [];
     }
 }
